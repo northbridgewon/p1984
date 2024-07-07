@@ -1,0 +1,196 @@
+<html><head>
+<title>American Information Portal</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Courier New', monospace;
+    background-color: #1a1a1a;
+    color: #b3b3b3;
+    overflow: hidden;
+  }
+  
+  #container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  #header {
+    background-color: #0d0d0d;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+  }
+  
+  #logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #cc0000;
+    letter-spacing: 5px;
+  }
+  
+  #content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+  }
+  
+  #telescreen {
+    width: 80%;
+    height: 60%;
+    background-color: #0d0d0d;
+    border: 2px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  #telescreen-content {
+    font-size: 18px;
+    text-align: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  #thoughtcrime-input {
+    width: 80%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #262626;
+    border: none;
+    color: #b3b3b3;
+    font-family: 'Courier New', monospace;
+  }
+  
+  #footer {
+    background-color: #0d0d0d;
+    padding: 10px;
+    text-align: center;
+    font-size: 12px;
+  }
+  
+  .hidden-message {
+    position: absolute;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  #cursor {
+    width: 10px;
+    height: 10px;
+    background-color: #cc0000;
+    border-radius: 50%;
+    position: absolute;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  
+  @keyframes flicker {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
+  }
+</style>
+</head>
+<body>
+<div id="container">
+  <div id="header">
+    <div id="logo">NATSOC</div>
+  </div>
+  
+  <div id="content">
+    <div id="telescreen">
+      <div id="telescreen-content"></div>
+    </div>
+    <input type="text" id="thoughtcrime-input" placeholder="Report thoughtcrime here..." />
+  </div>
+  
+  <div id="footer">
+    I have very vivid dreams and nightmares, and my biggest fear is of some kind of dystopian future where we're advanced in every way except in our humanity.
+  </div>
+</div>
+
+<div id="cursor"></div>
+
+<div class="hidden-message" style="top: 25%; left: 10%;">Freedom is Slavery</div>
+<div class="hidden-message" style="top: 40%; right: 15%;">Ignorance is Strength</div>
+<div class="hidden-message" style="bottom: 30%; left: 20%;">War is Peace</div>
+
+<script>
+  const messages = [
+    "War is Peace",
+    "Freedom is Slavery",
+    "Ignorance is Strength",
+    "Big Brother is Watching You",
+    "Thoughtcrime does not entail death: thoughtcrime IS death",
+    "2 + 2 = 5"
+  ];
+  
+  const telescreenContent = document.getElementById('telescreen-content');
+  const thoughtcrimeInput = document.getElementById('thoughtcrime-input');
+  const cursor = document.getElementById('cursor');
+  const hiddenMessages = document.querySelectorAll('.hidden-message');
+  
+  function displayRandomMessage() {
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+    telescreenContent.style.opacity = 0;
+    setTimeout(() => {
+      telescreenContent.textContent = randomMessage;
+      telescreenContent.style.opacity = 1;
+    }, 500);
+  }
+  
+  setInterval(displayRandomMessage, 5000);
+  
+  thoughtcrimeInput.addEventListener('input', function() {
+    if (this.value.toLowerCase().includes('rebellion') || this.value.toLowerCase().includes('freedom')) {
+      this.value = 'THOUGHTCRIME DETECTED';
+      this.style.color = '#cc0000';
+      setTimeout(() => {
+        this.value = '';
+        this.style.color = '#b3b3b3';
+      }, 2000);
+    }
+  });
+  
+  document.addEventListener('mousemove', function(e) {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    
+    hiddenMessages.forEach(message => {
+      const rect = message.getBoundingClientRect();
+      const distance = Math.sqrt(
+        Math.pow(e.clientX - (rect.left + rect.width/2), 2) +
+        Math.pow(e.clientY - (rect.top + rect.height/2), 2)
+      );
+      
+      if (distance < 100) {
+        message.style.opacity = 1 - (distance / 100);
+      } else {
+        message.style.opacity = 0;
+      }
+    });
+  });
+  
+  // Simulating surveillance
+  setInterval(() => {
+    const randomX = Math.random() * window.innerWidth;
+    const randomY = Math.random() * window.innerHeight;
+    cursor.style.left = randomX + 'px';
+    cursor.style.top = randomY + 'px';
+    cursor.style.animation = 'flicker 0.5s infinite';
+    setTimeout(() => {
+      cursor.style.animation = 'none';
+    }, 1000);
+  }, 10000);
+</script>
+</body></html>
